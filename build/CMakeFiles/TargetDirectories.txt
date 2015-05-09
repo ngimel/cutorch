@@ -1,0 +1,3 @@
+/home/soumith/code/cutorch/build/lib/THC/CMakeFiles/THC.dir
+/home/soumith/code/cutorch/build/CMakeFiles/cudatensormathwrap.dir
+/home/soumith/code/cutorch/build/CMakeFiles/cutorch.dir

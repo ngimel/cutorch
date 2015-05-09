@@ -4,6 +4,16 @@ if ok then
    local cdefs = [[
 typedef struct CUstream_st *cudaStream_t;
 
+struct cublasContext;
+typedef struct cublasContext *cublasHandle_t;
+typedef struct CUhandle_st *cublasHandle_t;
+
+typedef struct _THCCudaResourcesPerDevice {
+  cudaStream_t* streams;
+  cublasHandle_t* blasHandles;
+} THCCudaResourcesPerDevice;
+
+
 typedef enum THCStateDeviceMode {
   THCStateDeviceModeManual,
   THCStateDeviceModeAuto
@@ -12,14 +22,15 @@ typedef enum THCStateDeviceMode {
 typedef struct THCState
 {
   struct THCRNGState* rngState;
-  struct THCBlasState* blasState;
   struct cudaDeviceProp* deviceProperties;
   cudaStream_t currentStream;
-  cudaStream_t** streamsPerDevice;
+  cublasHandle_t currentBlasHandle;
+  THCCudaResourcesPerDevice* resourcesPerDevice;
   int numDevices;
   int numUserStreams;
+  int numUserBlasHandles;
   int currentPerDeviceStream;
-  THCStateDeviceMode deviceMode;
+  int currentPerDeviceBlasHandle;
 } THCState;
 
 cudaStream_t THCState_getCurrentStream(THCState *state);
