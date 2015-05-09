@@ -1,7 +1,6 @@
 #include "THCGeneral.h"
 #include "THCTensor.h"
 #include "THCTensorCopy.h"
-#include "THAtomic.h"
 
 /**** access methods ****/
 THCudaStorage *THCudaTensor_storage(THCState *state, const THCudaTensor *self)
@@ -566,7 +565,7 @@ long THCudaTensor_nElement(THCState *state, const THCudaTensor *self)
 void THCudaTensor_retain(THCState *state, THCudaTensor *self)
 {
   if(self->flag & TH_TENSOR_REFCOUNTED)
-    THAtomicIncrementRef(&self->refcount);
+    ++self->refcount;
 }
 
 void THCudaTensor_free(THCState *state, THCudaTensor *self)
@@ -576,7 +575,7 @@ void THCudaTensor_free(THCState *state, THCudaTensor *self)
 
   if(self->flag & TH_TENSOR_REFCOUNTED)
   {
-    if(THAtomicDecrementRef(&self->refcount))
+    if(--self->refcount == 0)
     {
       THFree(self->size);
       THFree(self->stride);

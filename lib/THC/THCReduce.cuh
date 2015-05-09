@@ -150,7 +150,7 @@ inline dim3 getContigReduceBlock(long numSlices, long reductionSize) {
   }
 
   // Scale up block size based on the reduction dimension size
-  long warpsInReductionSize = DIVUP(reductionSize, 32L);
+  long warpsInReductionSize = THCCeilDiv(reductionSize, 32L);
   int numWarps =
     warpsInReductionSize > (long) maxWarps ? maxWarps : (int) warpsInReductionSize;
   return dim3(numWarps * 32);
@@ -158,7 +158,7 @@ inline dim3 getContigReduceBlock(long numSlices, long reductionSize) {
 
 inline bool getNoncontigReduceGrid(long elements, dim3& grid) {
   // One output point per thread
-  return THC_getGridFromTiles(DIVUP(elements, THC_NONCONTIG_REDUCE_BLOCK_SIZE), grid);
+  return THC_getGridFromTiles(THCCeilDiv(elements, (long) THC_NONCONTIG_REDUCE_BLOCK_SIZE), grid);
 }
 
 inline bool getContigReduceGrid(long elements, dim3& grid) {

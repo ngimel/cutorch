@@ -1,6 +1,5 @@
 #include "THCStorage.h"
 #include "THCGeneral.h"
-#include "THAtomic.h"
 
 void THCudaStorage_set(THCState *state, THCudaStorage *self, long index, float value)
 {
@@ -106,7 +105,7 @@ THCudaStorage* THCudaStorage_newWithData(THCState *state, float *data, long size
 void THCudaStorage_retain(THCState *state, THCudaStorage *self)
 {
   if(self && (self->flag & TH_STORAGE_REFCOUNTED))
-    THAtomicIncrementRef(&self->refcount);
+    ++self->refcount;
 }
 
 void THCudaStorage_free(THCState *state, THCudaStorage *self)
@@ -114,7 +113,7 @@ void THCudaStorage_free(THCState *state, THCudaStorage *self)
   if(!(self->flag & TH_STORAGE_REFCOUNTED))
     return;
 
-  if (THAtomicDecrementRef(&self->refcount))
+  if (--(self->refcount) <= 0)
   {
     if(self->flag & TH_STORAGE_FREEMEM) {
       THCudaCheck(cudaFree(self->data));

@@ -1,4 +1,3 @@
-SET(CMAKE_C_FLAGS "-std=c99")
 SET(src
     THCGeneral.c THCStorage.c THCStorageCopy.c THCTensor.c THCTensorCopy.c)
 
@@ -40,9 +39,9 @@ INSTALL(FILES
           THCGeneral.h
           THCBlas.h
           THCStorage.h
-	  THCStorageCopy.h
+          THCStorageCopy.h
           THCTensor.h
-	  THCTensorCopy.h
+          THCTensorCopy.h
           THCTensorRandom.h
           THCTensorMath.h
           THCTensorConv.h

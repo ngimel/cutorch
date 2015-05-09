@@ -1,0 +1,46 @@
+cpp_library(
+    name = 'THC',
+    srcs = [
+        'THCGeneral.c',
+        'THCStorage.c',
+        'THCStorageCopy.c',
+        'THCTensor.c',
+        'THCTensorCopy.c',
+        'THC.cu',
+        'THCReduceApplyUtils.cu',
+        'THCBlas.cu',
+        'THCTensorMath.cu',
+        'THCTensorMath2.cu',
+        'THCTensorMathBlas.cu',
+        'THCTensorMathCompare.cu',
+        'THCTensorMathCompareT.cu',
+        'THCTensorMathPairwise.cu',
+        'THCTensorMathPointwise.cu',
+        'THCTensorMathScan.cu',
+        'THCTensorMathTransformReduce.cu',
+        'THCTensorMasked.cu',
+        'THCTensorIndex.cu',
+        'THCTensorConv.cu',
+        'THCTensorRandom.cu',
+        'THCApply.cu',
+        'THCTensorSort.cu',
+    ],
+    nvcc_flags = [
+      '-gencode=arch=compute_35,code="sm_35,compute_35"',
+    ],
+    compiler_flags = [
+        '-Wno-unused-local-typedefs',
+    ],
+    deps = [
+        '@/torch/fb/fbcunn:util',
+    ],
+    propagated_pp_flags = [
+        "-Ideeplearning/torch/cutorch/lib/THC",
+    ],
+    external_deps = [
+        ('torch7', 'trunk', 'TH'),
+        ('cuda', None, 'cuda'),
+        ('cuda', None, 'cublas'),
+        ('cuda', None, 'curand'),
+    ],
+)

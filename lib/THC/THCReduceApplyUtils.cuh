@@ -6,10 +6,7 @@
 #include "THGeneral.h"
 #include "THCGeneral.h"
 #include "THCTensor.h"
-
-#ifndef DIVUP
-#define DIVUP(x, y) (((x) + (y) - 1) / (y))
-#endif
+#include "THCDeviceUtils.cuh"
 
 // Maximum number of dimensions allowed for cutorch
 #define MAX_CUTORCH_DIMS 25
