@@ -7,6 +7,7 @@
 
 #define real float
 #define Real Cuda
+#define RealType Float
 
 #define torch_Storage_(NAME) TH_CONCAT_4(torch_,Real,Storage_,NAME)
 #define torch_Storage TH_CONCAT_STRING_3(torch.,Real,Storage)
@@ -17,6 +18,7 @@
 #include "generic/Tensor.c"
 #undef TH_GENERIC_FILE
 
+#undef RealType
 #undef real
 #undef Real
 

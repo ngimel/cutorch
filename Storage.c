@@ -7,23 +7,24 @@
 
 #define real float
 #define Real Cuda
+#define RealType Float
 #define TH_GENERIC_FILE "generic/Storage.c"
 
 #define torch_Storage_(NAME) TH_CONCAT_4(torch_,Real,Storage_,NAME)
 
-#define THFile_readRealRaw(file, data, size)                            \
+#define THFile_readRealRaw(file, data, size)                           \
   {                                                                     \
-    float *fdata = (float*)THAlloc(sizeof(float)*size);                 \
-    THFile_readFloatRaw(file, fdata, size);                             \
-    THCudaCheck(cudaMemcpy(data, fdata, size * sizeof(float), cudaMemcpyHostToDevice)); \
+    real *fdata = (real*)THAlloc(sizeof(real)*size);                    \
+    TH_CONCAT_3(THFile_read, RealType, Raw)(file, fdata, size);         \
+    THCudaCheck(cudaMemcpy(data, fdata, size * sizeof(real), cudaMemcpyHostToDevice)); \
     THFree(fdata);                                                      \
   }
 
-#define THFile_writeRealRaw(file, data, size)                           \
+#define THFile_writeRealRaw(file, data, size)                          \
   {                                                                     \
-    float *fdata = (float*)THAlloc(sizeof(float)*size);                 \
-    THCudaCheck(cudaMemcpy(fdata, data, size * sizeof(float), cudaMemcpyDeviceToHost)); \
-    THFile_writeFloatRaw(file, fdata, size);                            \
+    real *fdata = (real*)THAlloc(sizeof(real)*size);                 \
+    THCudaCheck(cudaMemcpy(fdata, data, size * sizeof(real), cudaMemcpyDeviceToHost)); \
+    TH_CONCAT_3(THFile_write, RealType, Raw)(file, fdata, size);        \
     THFree(fdata);                                                      \
   }
 
@@ -32,6 +33,7 @@
 #include "generic/Storage.c"
 
 #undef real
+#undef RealType
 #undef Real
 #undef TH_GENERIC_FILE
 
